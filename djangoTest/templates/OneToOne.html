@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="/static/js/jquery-3.4.1.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+           $("#sub1").click(function () {
+               var name = $("input[name=name]").val()
+               var email = $("input[name=email]").val()
+               var password = $("input[name=password]").val()
+               var type = $("input[name=type]").val()
+{#               alert("name="+name+"&email="+email+"&password="+password)#}
+               $.ajax({
+                   url: "http://127.0.0.1:8000/主外键Demo/update",
+                   type : "POST",
+                   data : "name="+name+"&email="+email+"&password="+password+"&type="+type,
+{#				   cache : false,#}
+{#				   processData : false,#}
+{#				   contentType : false,#}
+				   success : function(result) {
+					   window.location.href="http://127.0.0.1:8000/主外键Demo/show"
+				   },
+                   fail : function (res) {
+                       alert('修改失败!请重新修改');
+                   }
+               });
+           });
+        });
+
+    </script>
+</head>
+<body>
+<form action="/主外键Demo/insert" method="post" class="smart-green">
+    <h1>主外键Demo
+        <span>主外键Demo</span>
+    </h1>
+    <label>
+        <span>姓名 :</span>
+        <input id="name" type="text" value="{{ user.username }}" name="name" class="error" placeholder="请输入您的姓名"/>
+        <div class="error-msg"></div>
+    </label>
+
+    <label>
+        <span>密码 :</span>
+        <input id="password" type="text" value="{{ user.password }}" name="password" placeholder="请输入您的密码"/>
+        <div class="error-msg"></div>
+    </label>
+
+    <label>
+        <span>邮箱 :</span>
+        <input id="email" type="email" value="{{ user.email }}" name="email" placeholder="请输入邮箱地址"/>
+        <div class="error-msg"></div>
+    </label>
+
+    <label>
+        <span>类型 :</span>
+        <input id="type" type="text" value="{{ user.user_type.name }}" name="type" placeholder="请输入邮箱地址"/>
+        <div class="error-msg"></div>
+    </label>
+
+    <label>
+        <input type="self" class="button" value="列表" id="sub"/>
+        {% for u in users %}
+            <input type="self" value="{{ u.username }}"/>
+        {% endfor %}
+
+    </label>
+
+    <label>
+        <span>&nbsp;</span>
+        <input type="submit" class="button" value="提交" id="sub"/>
+        <input type="button" class="button" value="修改" id="sub1"/>
+    </label>
+{#    <input type='hidden' name='csrfmiddlewaretoken' value='SfHkbL4feo1G00sJQtbO7TtLN4c2BUwa' />#}
+    {% csrf_token %}
+</form>
+
+</body>
+</html>
